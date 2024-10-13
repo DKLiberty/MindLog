@@ -1,5 +1,3 @@
 # MindLog
 
 MindLog -
-
-jknjknkl
