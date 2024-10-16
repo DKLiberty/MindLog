@@ -1,7 +1,7 @@
 # Background Color
-background_color=#e3f2fd
+background_color=#000000
 
-text_bg=#bbdefb
+text_bg=#333333
 text_fg=#000000
 
 # Кнопки
@@ -12,5 +12,5 @@ button_radius=5
 button_padding=10
 
 # Шрифты
-font_family=Roboto
+font_family=Arial
 font_size=16
