@@ -1,8 +1,8 @@
-background_color=#ff0000
+background_color=#000000
 font_family=Arial
 font_size=14
-text_bg=#ff0000
-text_fg=#ff0000
-button_bg=#ff0000
-button_fg=#ffffff
+text_bg=#333333
+text_fg=#ffffff
+button_bg=#ffffff
+button_fg=#000000
 button_font_size=12
