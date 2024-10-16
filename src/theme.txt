@@ -1,15 +1,16 @@
-# Background and text
-background_color=#2e2e2e
-text_bg=#1e1e1e
-text_fg=#ffffff
+# Background Color
+background_color=#e3f2fd
 
-# Buttons
-button_bg=#4caf50
+text_bg=#bbdefb
+text_fg=#000000
+
+# Кнопки
+button_bg=#2196f3
 button_fg=#ffffff
 button_font_size=14
 button_radius=5
-button_padding=10    
+button_padding=10
 
-# Fonts
+# Шрифты
 font_family=Roboto
 font_size=16
