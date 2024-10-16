@@ -1,8 +1,15 @@
-background_color=#000000
-font_family=Arial
-font_size=14
-text_bg=#333333
+# Background and text
+background_color=#2e2e2e
+text_bg=#1e1e1e
 text_fg=#ffffff
-button_bg=#ffffff
-button_fg=#000000
-button_font_size=12
+
+# Buttons
+button_bg=#4caf50
+button_fg=#ffffff
+button_font_size=14
+button_radius=5
+button_padding=10    
+
+# Fonts
+font_family=Roboto
+font_size=16
