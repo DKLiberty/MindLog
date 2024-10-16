@@ -3,6 +3,6 @@ font_family=Arial
 font_size=14
 text_bg=#333333
 text_fg=#ffffff
-button_bg=#000000
+button_bg=#FF0000
 button_fg=#ffffff
 button_font_size=12
