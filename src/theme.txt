@@ -2,11 +2,11 @@
 background_color=#000000
 
 text_bg=#333333
-text_fg=#ffffff
+text_fg=#000000
 
 # Кнопки
 button_bg=#2196f3
-button_fg=#ffffff
+button_fg=#000000
 button_font_size=14
 button_radius=5
 button_padding=10
