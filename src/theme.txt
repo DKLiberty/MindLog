@@ -10,6 +10,8 @@ button_fg=#000000
 button_font_size=14
 button_radius=5
 button_padding=10
+button_active_bg=#388e3c
+button_active_fg=#ffffff
 
 # Шрифты
 font_family=Arial
