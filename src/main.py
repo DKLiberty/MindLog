@@ -1,116 +1,57 @@
-import tkinter as tk
-import tkinter.ttk as ttk
-from tkinter import messagebox
-
-import sqlite3
-
-import requests # To Import Theme from GitHub
-
+import flet as ft
 import os
-import time
+import subprocess
 
-# Определяем текущую директорию и создаем папку db, если она не существует
-current_directory = os.path.dirname(os.path.abspath(__file__))
-db_directory = os.path.join(current_directory, 'db')
+def main(page: ft.Page):
+    page.title = "MindLog"
+    page.window_width = 500
+    page.window_height = 500
+    page.window_resizable = False
+    page.window_center()
 
-if not os.path.exists(db_directory):
-    os.makedirs(db_directory)
+    select_mylog = ft.Text("Select .mylog file", size=20, weight="bold")
+    list_mylog = ft.ListView(expand=True)
+    no_mylog = ft.Text("No .mylog File", color = 'red', visible=False)
 
-# Путь к базе данных
-db_path = os.path.join(db_directory, 'notes.db')
+    def update_file_list():
+        current_folder = "."
+        mylog_files = []
 
-# Функция для загрузки тем из файла на GitHub
-def load_theme():
-    # url = "https://raw.githubusercontent.com/DKLiberty/MindLog/develop/src/theme.txt"
-    url = "https://raw.githubusercontent.com/DKLiberty/MindLog/develop/src/theme.txt?ts=" + str(int(time.time()))
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        theme = {}
-        for line in response.text.splitlines():
-            line = line.strip()  # Убираем пробелы в начале и конце
-            if '=' in line:  # Проверяем, что строка содержит символ '='
-                key_value = line.split('=')
-                if len(key_value) == 2:  # Проверяем, что получено два значения
-                    key, value = key_value
-                    theme[key] = value
-            else:
-                print(f"Пропущенная строка: {line}")  # Логируем пропущенные строки
+        for root, dirs, files in os.walk(current_folder):
+            for file in files:
+                if file.endswith('.mylog'):
+                    full_path = os.path.join(root, file)
+                    mylog_files.append(full_path)
+
+        if mylog_files:
+            list_mylog.controls.clear()
+            for mylog_file in mylog_files:
+                btn_db = ft.ElevatedButton(text=mylog_file, on_click=lambda e, db=mylog_file: open_mylog_file(db))
+                list_mylog.controls.append(btn_db)
+            no_mylog.visible = False
+        else:
+            no_mylog.visible = True
         
-        print("Загруженные темы:")  # Сообщение перед выводом тем
-        for key, value in theme.items():
-            print(f"{key}: {value}")  # Выводим все ключи и значения темы
+        page.update()
 
-        return theme
-    else:
-        messagebox.showerror("Ошибка", "Не удалось загрузить тему из GitHub.")
-        return {}
+    def open_mylog_file(file_path):
+        print(f"Opening file: {file_path}")
+        page.window_destroy()
+        subprocess.run(["source.exe", file_path])
 
-# Создание/подключение к базе данных SQLite
-conn = sqlite3.connect(db_path)
-cursor = conn.cursor()
-
-# Создаем таблицу, если она не существует
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS notes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        note TEXT NOT NULL
+    content_display = ft.Column(
+        [
+            select_mylog,
+            list_mylog,
+            no_mylog
+        ],
+        horizontal_alignment="center"
     )
-''')
 
-# Функция для добавления заметки в базу данных
-def add_note():
-    note = note_text.get("1.0", tk.END).strip()  # Получаем текст заметки
-    if note:
-        cursor.execute('INSERT INTO notes (note) VALUES (?)', (note,))
-        conn.commit()  # Сохраняем изменения
-        messagebox.showinfo("Успех", "Заметка добавлена!")
-        note_text.delete("1.0", tk.END)  # Очищаем текстовое поле
-    else:
-        messagebox.showwarning("Ошибка", "Заметка не может быть пустой!")
+    page.add(
+        content_display
+    )
 
-# Создание интерфейса
-root = tk.Tk()
-root.title("Заметки")
+    update_file_list()
 
-# Загрузка стилей из файла
-theme = load_theme()
-
-# Применение стилей
-root.configure(bg=theme['background_color'])
-
-# Текстовое поле для ввода заметки
-note_text = tk.Text(root, width=40, height=10, font=(theme['font_family'], int(theme['font_size'])), bg=theme['text_bg'], fg=theme['text_fg'])
-note_text.pack(pady=10)
-
-# Получаем параметры для кнопок
-button_font_size = int(theme['button_font_size'])  # Размер шрифта для кнопки
-
-
-# Создаем стиль для кнопки с использованием стилей из theme.txt
-style = ttk.Style()
-style.configure("TButton",
-                background=theme['button_bg'],
-                foreground=theme['button_fg'],
-                font=(theme['font_family'], button_font_size),  # Убедитесь, что button_font_size определен
-                padding=int(theme.get('button_padding', '10')))
-style.map("TButton",
-          background=[('active', theme['button_bg'])],
-          foreground=[('active', theme['button_fg'])])
-
-# Кнопка для добавления заметки
-add_button = ttk.Button(
-    root,
-    text="Добавить заметку",
-    command=add_note
-)
-add_button.pack(pady=10)
-
-# Скругляем углы кнопки (возможно, необходимо использовать другой метод)
-# Это может потребовать дополнительных библиотек или кастомного стиля
-
-
-root.mainloop()
-
-# Закрываем соединение с базой данных при выходе
-conn.close()
+ft.app(target=main)
